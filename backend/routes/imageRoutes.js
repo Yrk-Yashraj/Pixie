@@ -1,16 +1,17 @@
 import express from "express";
 import axios from "axios";
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 const router = express.Router();
 
-// Your RapidAPI key and host, ensure these are secure
 const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY;
-const RAPIDAPI_HOST = "";
 
-router.post("/", async (req, res) => {
-  const { prompt } = req.body;
-
+router.route("/").post(async (req, res) => {
   try {
+    const { prompt } = req.body;
+
     const response = await axios.post(
       `https://imageai-generator.p.rapidapi.com/image`,
       {
@@ -28,7 +29,8 @@ router.post("/", async (req, res) => {
         },
       }
     );
-    res.status(200).json(response.data);
+    const image = response.data;
+    res.status(200).json({ photo: image });
   } catch (error) {
     console.error("Error generating image:", error);
     res.status(500).json({ error: "Failed to generate image" });

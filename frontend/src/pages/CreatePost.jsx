@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
 import { preview } from "../assets";
 import { getRandomPrompt } from "../utils";
 import { FormField, Loader } from "../components";
@@ -29,28 +29,27 @@ const CreatePost = () => {
     if (form.prompt) {
       try {
         setGeneratingImg(true);
-        const response = await fetch(
-          "https://dalle-arbb.onrender.com/api/v1/dalle",
+        const response = await axios.post(
+          "http://localhost:3000/api/image",
           {
-            method: "POST",
+            prompt: form.prompt,
+          },
+          {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-              prompt: form.prompt,
-            }),
           }
         );
 
-        const data = await response.json();
-        setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` });
+        const base64Image = response.data.photo;
+        setForm({ ...form, photo: `data:image/jpeg;base64,${base64Image}` });
       } catch (err) {
-        alert(err);
+        alert(`Error: ${err.response ? err.response.data.error : err.message}`);
       } finally {
         setGeneratingImg(false);
       }
     } else {
-      alert("Please provide proper prompt");
+      alert("Please provide a proper prompt");
     }
   };
 
@@ -87,9 +86,11 @@ const CreatePost = () => {
   return (
     <section className="max-w-7xl mx-auto">
       <div>
-        <h1 className="font-extrabold text-[#222328] text-[32px]">Create</h1>
+        <h1 className="font-extrabold text-[#222328] text-[32px]">
+          Imagination-Centre
+        </h1>
         <p className="mt-2 text-[#666e75] text-[14px] max-w-[500px]">
-          Generate an imaginative image through AI.
+          Imagine a creative image through AI.
         </p>
       </div>
 
@@ -150,8 +151,10 @@ const CreatePost = () => {
 
         <div className="mt-10">
           <p className="mt-2 text-[#666e75] text-[14px]">
-            ** Once you have created the image you want, you can** view it in
-            the Pixel Palette.
+            Browse through your imagination in the{" "}
+            <a className="text-purple-600" href="http://localhost:5173/">
+              Pixel Palette
+            </a>
           </p>
           <button
             type="submit"
