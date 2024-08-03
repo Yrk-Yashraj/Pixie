@@ -17,8 +17,8 @@ router.route("/").post(async (req, res) => {
       {
         prompt,
         negative_prompt: "",
-        width: 512,
-        height: 512,
+        width: 256,
+        height: 256,
         hr_scale: 2,
       },
       {

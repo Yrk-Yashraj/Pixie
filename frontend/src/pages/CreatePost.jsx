@@ -41,8 +41,8 @@ const CreatePost = () => {
           }
         );
 
-        const base64Image = response.data.photo;
-        setForm({ ...form, photo: `data:image/jpeg;base64,${base64Image}` });
+        const gen_image = response.data.photo;
+        setForm({ ...form, photo: `data:image/jpeg;base64,${gen_image}` });
       } catch (err) {
         alert(`Error: ${err.response ? err.response.data.error : err.message}`);
       } finally {
@@ -59,18 +59,17 @@ const CreatePost = () => {
     if (form.prompt && form.photo) {
       setLoading(true);
       try {
-        const response = await fetch(
-          "https://dalle-arbb.onrender.com/api/v1/post",
+        const response = await axios.post(
+          "http://localhost:3000/api/post",
+          { ...form },
           {
-            method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ ...form }),
           }
         );
 
-        await response.json();
+        await response.json;
         alert("Success");
         navigate("/");
       } catch (err) {
@@ -84,17 +83,17 @@ const CreatePost = () => {
   };
 
   return (
-    <section className="max-w-7xl mx-auto">
-      <div>
-        <h1 className="font-extrabold text-[#222328] text-[32px]">
+    <section className="max-w-7xl mx-auto p-4">
+      <div className="text-center">
+        <h1 className="font-extrabold text-[#222328] text-4xl">
           Imagination-Centre
         </h1>
-        <p className="mt-2 text-[#666e75] text-[14px] max-w-[500px]">
+        <p className="mt-2 text-[#666e75] text-lg max-w-2xl mx-auto">
           Imagine a creative image through AI.
         </p>
       </div>
 
-      <form className="mt-16 max-w-3xl" onSubmit={handleSubmit}>
+      <form className="mt-16 max-w-3xl mx-auto" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-5">
           <FormField
             labelName="Your Name"
@@ -143,7 +142,7 @@ const CreatePost = () => {
           <button
             type="button"
             onClick={generateImage}
-            className=" text-white bg-green-700 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+            className="text-white bg-green-700 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
           >
             {generatingImg ? "Generating..." : "Generate"}
           </button>

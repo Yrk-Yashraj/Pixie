@@ -1,10 +1,10 @@
 import React from "react";
 
 const Loader = () => (
-  <div role="status">
+  <div role="status" className="flex justify-center items-center">
     <svg
       aria-hidden="true"
-      className="inline w-10 h-10 mr-2 text-gray-200 animate-spin fill-[#6469ff]"
+      className="inline w-12 h-12 mr-2 text-gray-200 animate-spin fill-[#6469ff]"
       viewBox="0 0 100 101"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
